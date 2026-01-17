@@ -1,0 +1,67 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Django ---
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media / static (обычно не коммитят)
+media/
+staticfiles/
+
+# Собранные статические (если собираешь)
+# static/
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.env.local
+.env.*.local
+
+# --- Virtualenv ---
+venv/
+.venv/
+ENV/
+env/
+pip-wheel-metadata/
+
+# --- Tests / coverage ---
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# --- Linters / type checkers ---
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# --- Build / packaging ---
+build/
+dist/
+*.egg-info/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.iml
+
+# --- DRF / misc ---
+.cache/
