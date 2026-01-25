@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    env_file: /opt/amazing_hunting_5/.env.prod
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  web:
+    image: igorek86/amazing_hunting_5:latest
+    env_file: /opt/amazing_hunting_5/.env.prod
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"   # пока без Nginx — оставлю, иначе извне не зайду
+    volumes:
+      - static:/app/staticfiles
+      - media:/app/media
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static:
+  media:

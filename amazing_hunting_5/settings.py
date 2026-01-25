@@ -25,7 +25,11 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Чтение .env файла
-environ.Env.read_env(BASE_DIR / '.env')
+# ENV_FILE = os.getenv("ENV_FILE", ".env")
+# environ.Env.read_env(BASE_DIR / ENV_FILE)
+ENV_FILE = os.getenv("ENV_FILE")
+if ENV_FILE:
+    environ.Env.read_env(BASE_DIR / ENV_FILE)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -146,7 +150,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / "media"
 
 TOTAL_ON_PAGE = 3
 
@@ -169,11 +173,11 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_USER_MODEL = 'authentication.User'
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 год
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+# if not DEBUG:
+#     SECURE_SSL_REDIRECT = True
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
+#     SECURE_BROWSER_XSS_FILTER = True
+#     SECURE_HSTS_SECONDS = 31536000  # 1 год
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True

@@ -11,3 +11,9 @@ class VacancyCreatePermissions(BasePermission):
         if request.user.role == User.HR:
             return True
         return False
+
+# если захочу использовать этот код, тогда нужно будет добавить в конце
+# class VacancyCreateView(CreateAPIView):
+#     queryset = Vacancy.objects.all()
+#     serializer_class = VacancyCreateSerializer
+#     permission_classes = [IsAuthenticated, VacancyCreatePermissions]
