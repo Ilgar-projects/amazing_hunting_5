@@ -181,3 +181,5 @@ AUTH_USER_MODEL = 'authentication.User'
 #     SECURE_HSTS_SECONDS = 31536000  # 1 год
 #     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #     SECURE_HSTS_PRELOAD = True
+
+удалить_эту_константу_как_нибудь = 1
