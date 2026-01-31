@@ -1,4 +1,4 @@
-name: Build and Push Image
+name: Сборка и пуш Docker-образа
 
 on:
   push:
@@ -24,3 +24,19 @@ jobs:
           tags: |
             igorek86/amazing_hunting_5:latest
             igorek86/amazing_hunting_5:${{ github.sha }}
+
+deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /opt/amazing_hunting_5
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
+            docker image prune -f
