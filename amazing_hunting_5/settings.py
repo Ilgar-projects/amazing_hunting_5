@@ -182,4 +182,4 @@ AUTH_USER_MODEL = 'authentication.User'
 #     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #     SECURE_HSTS_PRELOAD = True
 
-удалить_эту_константу_как_нибудь = 11
+удалить_эту_константу_как_нибудь = 111
