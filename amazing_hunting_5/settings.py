@@ -189,4 +189,4 @@ CSRF_TRUSTED_ORIGINS = [
 #     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #     SECURE_HSTS_PRELOAD = True
 
-удалить_эту_константу_как_нибудь = 111
+удалить_эту_константу_как_нибудь = 1111
