@@ -31,7 +31,7 @@ router.register('skill', SkillsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('hello/', views.hello),
+    path('/', views.hello),
     path('vacancy/', include('vacancies.urls')),
     path('company/', include('companies.urls')),
     path('user/', include('authentication.urls')),
