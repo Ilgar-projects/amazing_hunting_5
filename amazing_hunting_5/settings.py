@@ -173,6 +173,13 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_USER_MODEL = 'authentication.User'
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_TRUSTED_ORIGINS = [
+    "https://pusikmusik.ru",
+    "https://www.pusikmusik.ru",
+]
+
+
 # if not DEBUG:
 #     SECURE_SSL_REDIRECT = True
 #     SESSION_COOKIE_SECURE = True
