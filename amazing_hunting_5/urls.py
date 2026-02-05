@@ -21,7 +21,9 @@ from django.urls import path, include
 from rest_framework import routers
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from django.contrib.auth.views import LogoutView
 
+from authentication.web_views import AuthLandingView
 from vacancies import views
 from vacancies.views import SkillsViewSet
 
@@ -31,7 +33,8 @@ router.register('skill', SkillsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('', views.hello),
+    path('', AuthLandingView.as_view(), name='home'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('vacancy/', include('vacancies.urls')),
     path('company/', include('companies.urls')),
     path('user/', include('authentication.urls')),
