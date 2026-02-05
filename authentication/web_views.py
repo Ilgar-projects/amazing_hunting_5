@@ -1,44 +1,50 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
-from django.utils.decorators import method_decorator
 from django.views import View
 
-from vacancies.models import Vacancy
-from vacancies.web_forms import VacancyWebForm
+from .forms import SignUpForm
 
 
-class SearchView(View):
-    template_name = "vacancies/search.html"
+class AuthLandingView(View):
+    """Главная страница: Регистрация (по умолчанию) + вкладка Вход."""
 
-    def get(self, request):
-        # показываем все вакансии (можешь потом фильтровать по status="open")
-        vacancies = Vacancy.objects.select_related("user").prefetch_related("skills").all().order_by("-id")
-        q = (request.GET.get("q") or "").strip()
-        if q:
-            vacancies = vacancies.filter(title__icontains=q) | vacancies.filter(text__icontains=q)
-        return render(request, self.template_name, {"vacancies": vacancies, "q": q, "active_nav": "search"})
-
-
-@method_decorator(login_required, name="dispatch")
-class CreateVacancyView(View):
-    template_name = "vacancies/create.html"
+    template_name = "authentication/auth_landing.html"
 
     def get(self, request):
-        form = VacancyWebForm()
-        return render(request, self.template_name, {"form": form, "active_nav": "create"})
+        active_tab = request.GET.get("tab", "signup")
+        context = {
+            "signup_form": SignUpForm(),
+            "login_form": AuthenticationForm(request),
+            "active_tab": active_tab,
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request):
-        form = VacancyWebForm(request.POST)
-        if form.is_valid():
-            form.save(user=request.user)
-            return redirect("search")
-        return render(request, self.template_name, {"form": form, "active_nav": "create"})
+        # какая кнопка нажата
+        action = request.POST.get("action", "signup")
 
+        signup_form = SignUpForm()
+        login_form = AuthenticationForm(request)
+        active_tab = "signup"
 
-@method_decorator(login_required, name="dispatch")
-class ProfileView(View):
-    template_name = "vacancies/profile.html"
+        if action == "login":
+            active_tab = "login"
+            login_form = AuthenticationForm(request, data=request.POST)
+            if login_form.is_valid():
+                auth_login(request, login_form.get_user())
+                return redirect("search")
+        else:
+            active_tab = "signup"
+            signup_form = SignUpForm(request.POST)
+            if signup_form.is_valid():
+                user = signup_form.save()
+                auth_login(request, user)
+                return redirect("search")
 
-    def get(self, request):
-        my = Vacancy.objects.filter(user=request.user).prefetch_related("skills").order_by("-id")
-        return render(request, self.template_name, {"my_vacancies": my, "active_nav": "profile"})
+        context = {
+            "signup_form": signup_form,
+            "login_form": login_form,
+            "active_tab": active_tab,
+        }
+        return render(request, self.template_name, context)
