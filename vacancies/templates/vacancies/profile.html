@@ -1,42 +1,33 @@
 {% extends "base_neon.html" %}
 {% block title %}Профиль{% endblock %}
 {% block content %}
-  <div class="card" style="margin-top:10px">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
       <div>
-        <div class="title">Профиль</div>
-        <div class="subtitle">Вы вошли как <b>{{ request.user.username }}</b>{% if request.user.email %} · {{ request.user.email }}{% endif %}</div>
+        <h2 style="margin:0 0 6px;">Профиль</h2>
+        <div class="muted">Вы вошли как <b>{{ request.user.username }}</b>{% if request.user.email %} • {{ request.user.email }}{% endif %}</div>
       </div>
+
       <form method="post" action="{% url 'logout' %}" style="margin:0">
         {% csrf_token %}
-        <button class="btn secondary" type="submit" style="width:auto; padding:12px 14px;">Выйти</button>
+        <button class="btn" type="submit" style="margin-top:0;">Выйти</button>
       </form>
     </div>
   </div>
 
-  <div class="card" style="margin-top:14px">
-    <div class="title" style="font-size:18px">Мои вакансии</div>
-    <div class="subtitle">Вакансии, которые создали вы</div>
+  <div style="height:14px"></div>
+
+  <div class="card">
+    <h3 style="margin:0 0 10px;">Мои вакансии</h3>
 
     {% for v in my_vacancies %}
-      <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.10)">
-        <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-          <div>
-            <div style="font-weight:800">{{ v.slug }}</div>
-            <div class="subtitle">{{ v.created }} · ❤ {{ v.likes }} · {{ v.get_status_display }}</div>
-          </div>
-        </div>
-        <div style="margin-top:8px; color:var(--muted)">{{ v.text|truncatechars:180 }}</div>
-        {% if v.skills.all %}
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-            {% for s in v.skills.all %}
-              <span class="chip">{{ s.name }}</span>
-            {% endfor %}
-          </div>
-        {% endif %}
+      <div style="padding:12px 0; border-top:1px solid rgba(255,255,255,.10);">
+        <div style="font-weight:900;">{{ v.title|default:v.slug }}</div>
+        <div class="muted" style="font-size:13px;">Статус: {{ v.get_status_display }} • {{ v.created }}</div>
+        <div style="margin-top:6px; line-height:1.45;">{{ v.text }}</div>
       </div>
     {% empty %}
-      <div style="margin-top:12px" class="subtitle">У вас пока нет вакансий. Нажмите "Создать" внизу.</div>
+      <div class="muted">Пока нет вакансий. Нажми «Создать» внизу.</div>
     {% endfor %}
   </div>
 {% endblock %}

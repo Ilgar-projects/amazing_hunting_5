@@ -1,63 +1,47 @@
 {% extends "base_neon.html" %}
-{% block title %}Поиск{% endblock %}
+{% block title %}Поиск вакансий{% endblock %}
 {% block content %}
-  <div class="card" style="margin-top:10px">
-    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-      <div>
-        <div class="title">Вакансии</div>
-        <div class="subtitle">Все вакансии, созданные пользователями</div>
-      </div>
-      <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
-        <input class="input" type="text" name="q" value="{{ q }}" placeholder="Поиск по названию, тексту, пользователю">
-        <button class="btn primary" type="submit" style="width:auto; padding:12px 14px;">Найти</button>
-      </form>
-    </div>
+  <div class="card">
+    <h2 style="margin:0 0 6px;">Поиск</h2>
+    <div class="muted" style="margin-bottom:14px;">Все вакансии всех пользователей.</div>
+
+    <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
+      <input name="q" value="{{ q }}" placeholder="Поиск по названию или описанию" style="flex:1; min-width:240px;">
+      <button class="btn" type="submit" style="margin-top:0;">Найти</button>
+    </form>
   </div>
 
+  <div style="height:14px"></div>
+
   {% for v in vacancies %}
-    <div class="card" style="margin-top:14px">
-      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div>
-          <div class="title" style="font-size:18px">{{ v.slug }}</div>
-          <div class="subtitle">Автор: <b>{{ v.username|default:"—" }}</b> · Опубликовано: {{ v.created }}</div>
+          <div style="font-weight:900; font-size:18px;">{{ v.title|default:v.slug }}</div>
+          <div class="muted" style="font-size:13px;">Автор: {{ v.user.username|default:"—" }} • ID: {{ v.id }} • {{ v.created }}</div>
         </div>
-        <div class="badge">❤ {{ v.likes }}</div>
+        <div class="muted" style="font-size:13px;">Статус: {{ v.get_status_display }}</div>
       </div>
 
-      <div style="margin-top:12px; line-height:1.55; color:var(--muted)">
-        {{ v.text|truncatechars:260 }}
-      </div>
+      <div style="margin-top:10px; line-height:1.5;">{{ v.text }}</div>
 
       {% if v.skills.all %}
-        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
           {% for s in v.skills.all %}
-            <span class="chip">{{ s.name }}</span>
+            <span style="padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.18); color:rgba(233,244,255,.85); font-size:12px;">
+              {{ s.name }}
+            </span>
           {% endfor %}
         </div>
       {% endif %}
-
-      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn secondary" href="#" onclick="return false;">Откликнуться</a>
-        <a class="btn secondary" href="#" onclick="return false;">Связаться</a>
-      </div>
     </div>
   {% empty %}
-    <div class="card" style="margin-top:14px">
-      <div class="subtitle">Пока нет вакансий.</div>
+    <div class="card">
+      Ничего не найдено.
     </div>
   {% endfor %}
+{% endblock %}
 
-  {% if is_paginated %}
-    <div class="card" style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-      <div class="subtitle">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        {% if page_obj.has_previous %}
-          <a class="btn secondary" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Назад</a>
-        {% endif %}
-        {% if page_obj.has_next %}
-          <a class="btn secondary" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Вперёд</a>
-        {% endif %}
-      </div>
-    </div>
-  {% endif %}
+{% block extra_head %}
+  {% with "search" as _ %}{% endwith %}
 {% endblock %}
