@@ -13,13 +13,7 @@ from vacancies.serializers import VacancyListSerializer, VacancyDetailSerializer
 
 
 def hello(request):
-    return HttpResponse("ПУСИКМУСИК УРА САЙТ РАБОТАЕТ КККККККККККККККККККККККК"
-                        "РРРРРРРРРРРРРРРРРРРРРРРРРР"
-                        "УУУУУУУУУУУУУУУУУУУУУУУУУУУУУУ"
-                        "ТТТТТТТТТТТТТТТТТТТТТТТТТТТТ"
-                        "ОООООООООООООООООООООООООООО"
-                        "ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ"
-                        "ЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ :-0 :-) :-)))))))")
+    return HttpResponse("ПУСИКМУСИК УРА САЙТ РАБОТАЕТ  :-0 :-) :-)))))))")
 
 
 class SkillsViewSet(ModelViewSet):
