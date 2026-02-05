@@ -173,6 +173,11 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_USER_MODEL = 'authentication.User'
 
+# для веб-страниц (LoginRequiredMixin)
+LOGIN_URL = 'home'
+LOGIN_REDIRECT_URL = 'search'
+LOGOUT_REDIRECT_URL = 'home'
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = [
     "https://pusikmusik.ru",

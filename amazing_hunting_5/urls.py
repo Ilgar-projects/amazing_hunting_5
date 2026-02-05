@@ -24,6 +24,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from django.contrib.auth.views import LogoutView
 
 from authentication.web_views import AuthLandingView
+from vacancies.web_views import SearchView, VacancyCreateWebView, ProfileView
 from vacancies import views
 from vacancies.views import SkillsViewSet
 
@@ -34,6 +35,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('', AuthLandingView.as_view(), name='home'),
+    path('search/', SearchView.as_view(), name='search'),
+    path('create/', VacancyCreateWebView.as_view(), name='create'),
+    path('profile/', ProfileView.as_view(), name='profile'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('vacancy/', include('vacancies.urls')),
     path('company/', include('companies.urls')),

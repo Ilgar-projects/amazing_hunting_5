@@ -12,6 +12,9 @@ class AuthLandingView(View):
     template_name = "authentication/auth_landing.html"
 
     def get(self, request):
+        # если уже вошли — сразу отправляем в "Поиск"
+        if request.user.is_authenticated:
+            return redirect("search")
         active_tab = request.GET.get("tab", "signup")
         context = {
             "signup_form": SignUpForm(),
@@ -33,14 +36,14 @@ class AuthLandingView(View):
             login_form = AuthenticationForm(request, data=request.POST)
             if login_form.is_valid():
                 auth_login(request, login_form.get_user())
-                return redirect("home")
+                return redirect("search")
         else:
             active_tab = "signup"
             signup_form = SignUpForm(request.POST)
             if signup_form.is_valid():
                 user = signup_form.save()
                 auth_login(request, user)
-                return redirect("home")
+                return redirect("search")
 
         context = {
             "signup_form": signup_form,

@@ -1,0 +1,63 @@
+{% extends "base_neon.html" %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+  <div class="card" style="margin-top:10px">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <div>
+        <div class="title">Вакансии</div>
+        <div class="subtitle">Все вакансии, созданные пользователями</div>
+      </div>
+      <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <input class="input" type="text" name="q" value="{{ q }}" placeholder="Поиск по названию, тексту, пользователю">
+        <button class="btn primary" type="submit" style="width:auto; padding:12px 14px;">Найти</button>
+      </form>
+    </div>
+  </div>
+
+  {% for v in vacancies %}
+    <div class="card" style="margin-top:14px">
+      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+        <div>
+          <div class="title" style="font-size:18px">{{ v.slug }}</div>
+          <div class="subtitle">Автор: <b>{{ v.username|default:"—" }}</b> · Опубликовано: {{ v.created }}</div>
+        </div>
+        <div class="badge">❤ {{ v.likes }}</div>
+      </div>
+
+      <div style="margin-top:12px; line-height:1.55; color:var(--muted)">
+        {{ v.text|truncatechars:260 }}
+      </div>
+
+      {% if v.skills.all %}
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+          {% for s in v.skills.all %}
+            <span class="chip">{{ s.name }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn secondary" href="#" onclick="return false;">Откликнуться</a>
+        <a class="btn secondary" href="#" onclick="return false;">Связаться</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="card" style="margin-top:14px">
+      <div class="subtitle">Пока нет вакансий.</div>
+    </div>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <div class="card" style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <div class="subtitle">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        {% if page_obj.has_previous %}
+          <a class="btn secondary" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Назад</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+          <a class="btn secondary" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Вперёд</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

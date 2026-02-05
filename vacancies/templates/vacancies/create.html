@@ -1,0 +1,44 @@
+{% extends "base_neon.html" %}
+{% block title %}Создать{% endblock %}
+{% block content %}
+  <div class="card" style="margin-top:10px">
+    <div class="title">Создать вакансию</div>
+    <div class="subtitle">Заполните форму и вакансия появится в "Поиск".</div>
+
+    <form method="post" style="margin-top:12px">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <label class="label" for="id_slug">Название / заголовок</label>
+      {{ form.slug }}
+      {{ form.slug.errors }}
+
+      <label class="label" for="id_text" style="margin-top:12px">Описание</label>
+      {{ form.text }}
+      {{ form.text.errors }}
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px">
+        <div style="flex:1; min-width:220px">
+          <label class="label" for="id_min_experience">Мин. опыт (лет)</label>
+          {{ form.min_experience }}
+          {{ form.min_experience.errors }}
+        </div>
+        <div style="flex:1; min-width:220px">
+          <label class="label" for="id_status">Статус</label>
+          {{ form.status }}
+          {{ form.status.errors }}
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="label">Навыки</div>
+        <div class="skills">
+          {{ form.skills }}
+        </div>
+        {{ form.skills.errors }}
+      </div>
+
+      <button class="btn primary" type="submit" style="margin-top:16px">Опубликовать</button>
+    </form>
+  </div>
+{% endblock %}
