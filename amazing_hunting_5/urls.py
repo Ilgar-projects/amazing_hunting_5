@@ -25,7 +25,6 @@ from django.contrib.auth.views import LogoutView
 
 from authentication.web_views import AuthLandingView
 from vacancies.web_views import SearchView, VacancyCreateWebView, ProfileView
-from vacancies import views
 from vacancies.views import SkillsViewSet
 
 router = routers.SimpleRouter()

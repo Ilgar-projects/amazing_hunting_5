@@ -20,7 +20,7 @@ class SearchView(View):
 
 
 @method_decorator(login_required, name="dispatch")
-class CreateVacancyView(View):
+class VacancyCreateWebView(View):
     template_name = "vacancies/create.html"
 
     def get(self, request):
