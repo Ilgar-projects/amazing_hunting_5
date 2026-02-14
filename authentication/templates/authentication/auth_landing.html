@@ -27,249 +27,160 @@
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color:var(--text);
       background:radial-gradient(1200px 800px at 50% 25%, rgba(85,225,255,.20), transparent 60%),
-                 radial-gradient(900px 600px at 20% 80%, rgba(42,167,255,.18), transparent 55%),
-                 linear-gradient(180deg, var(--bg2), var(--bg1));
+                 radial-gradient(900px 600px at 20% 80%, rgba(42,167,255,.14), transparent 65%),
+                 linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow:hidden;
-      padding:28px 12px;
+      padding:20px 12px;
     }
 
-    /* "космические" мерцающие точки */
-    body::before{
-      content:"";
+    /* ===== STARFIELD BACKGROUND (движение + мерцание) ===== */
+    .starfield{
       position:fixed;
-      inset:-20%;
-      background-image:
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.55) 50%, transparent 60%),
-        radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,.40) 50%, transparent 60%),
-        radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,.45) 50%, transparent 60%),
-        radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.35) 50%, transparent 60%),
-        radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,.50) 50%, transparent 60%),
-        radial-gradient(1px 1px at 15% 90%, rgba(255,255,255,.35) 50%, transparent 60%);
-      filter:blur(.2px);
-      opacity:.55;
-      animation:twinkle 4.8s ease-in-out infinite;
+      inset:0;
       pointer-events:none;
+      z-index:0;
+      overflow:hidden;
     }
-    body::after{
-      content:"";
+
+    .starfield .stars{
+      position:absolute;
+      inset:-60%;
+      background-repeat:repeat;
+      will-change:transform, opacity;
+      animation-name: starDrift, starTwinkle;
+      animation-timing-function: linear, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+    }
+
+    .starfield .s1{
+      background-image:
+        radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,.95) 60%, transparent 61%),
+        radial-gradient(1px 1px at 110px 80px, rgba(255,255,255,.75) 60%, transparent 61%),
+        radial-gradient(1px 1px at 60px 140px, rgba(255,255,255,.85) 60%, transparent 61%),
+        radial-gradient(1px 1px at 190px 30px, rgba(255,255,255,.70) 60%, transparent 61%),
+        radial-gradient(1px 1px at 220px 160px, rgba(255,255,255,.65) 60%, transparent 61%),
+        radial-gradient(1px 1px at 20px 160px, rgba(255,255,255,.75) 60%, transparent 61%);
+      background-size:260px 190px;
+      opacity:.55;
+      animation-duration: 160s, 6s;
+    }
+
+    .starfield .s2{
+      background-image:
+        radial-gradient(1.5px 1.5px at 40px 60px, rgba(170,235,255,.90) 60%, transparent 61%),
+        radial-gradient(1.5px 1.5px at 160px 20px, rgba(170,235,255,.70) 60%, transparent 61%),
+        radial-gradient(1.5px 1.5px at 200px 130px, rgba(170,235,255,.80) 60%, transparent 61%),
+        radial-gradient(1.5px 1.5px at 90px 150px, rgba(170,235,255,.65) 60%, transparent 61%);
+      background-size:320px 240px;
+      opacity:.35;
+      filter:blur(.2px);
+      animation-duration: 240s, 9s;
+    }
+
+    .starfield .s3{
+      background-image:
+        radial-gradient(2px 2px at 80px 90px, rgba(255,255,255,.55) 60%, transparent 61%),
+        radial-gradient(2px 2px at 220px 40px, rgba(255,255,255,.45) 60%, transparent 61%),
+        radial-gradient(2px 2px at 260px 170px, rgba(255,255,255,.40) 60%, transparent 61%);
+      background-size:420px 320px;
+      opacity:.22;
+      filter:blur(.05px);
+      animation-duration: 320s, 12s;
+    }
+
+    .nebula{
       position:fixed;
       inset:-30%;
-      background:radial-gradient(400px 260px at 50% 110%, rgba(85,225,255,.22), transparent 70%);
+      background:radial-gradient(420px 280px at 50% 110%, rgba(85,225,255,.22), transparent 70%);
       filter:blur(18px);
-      opacity:.8;
+      opacity:.85;
       pointer-events:none;
-    }
-    @keyframes twinkle{
-      0%,100%{opacity:.40}
-      50%{opacity:.80}
+      z-index:0;
+      animation: nebulaPulse 8s ease-in-out infinite;
     }
 
-    .wrap{width:min(440px, 94vw);}
+    @keyframes starDrift{
+      from { transform: translate3d(0,0,0); }
+      to   { transform: translate3d(0,-20%,0); }
+    }
 
-    .card{
+    @keyframes starTwinkle{
+      0%,100% { opacity:.22; }
+      50%     { opacity:.75; }
+    }
+
+    @keyframes nebulaPulse{
+      0%,100% { opacity:.65; transform: translate3d(0,0,0) scale(1); }
+      50%     { opacity:.95; transform: translate3d(0,-1%,0) scale(1.03); }
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      width:min(520px, 96vw);
+      border-radius:22px;
       background:var(--card);
       border:1px solid var(--stroke);
-      border-radius:20px;
-      padding:18px;
-      box-shadow:0 24px 70px rgba(0,0,0,.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      position:relative;
-    }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      border-radius:20px;
-      padding:1px;
-      background:linear-gradient(135deg, rgba(85,225,255,.50), rgba(42,167,255,.10), rgba(85,225,255,.40));
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events:none;
-      opacity:.55;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+      padding:18px 16px;
     }
 
-    .header{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:10px;}
-    .header h1{margin:0; font-size:20px; letter-spacing:.2px;}
-    .header p{margin:4px 0 0; font-size:13px; color:var(--muted)}
+    h1{margin:0 0 10px; font-size:22px}
+    p{margin:0 0 14px; color:var(--muted); line-height:1.45}
 
-    .userbox{
-      margin:10px 0 14px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(85,225,255,.18);
-      background:rgba(0,0,0,.18);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .userbox .who{color:var(--muted); font-size:13px}
-    .userbox a{color:var(--neon); text-decoration:none; font-weight:700;}
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      margin:14px 0 12px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:16px;
-      padding:6px;
-    }
-    .tab{
-      flex:1;
-      text-align:center;
-      padding:10px 12px;
-      border-radius:12px;
-      text-decoration:none;
-      color:var(--muted);
-      font-weight:700;
-      border:1px solid transparent;
-    }
-    .tab.active{
-      color:var(--text);
-      border-color:rgba(85,225,255,.25);
-      background:linear-gradient(180deg, rgba(85,225,255,.18), rgba(42,167,255,.08));
-      box-shadow:0 0 18px rgba(85,225,255,.14);
-    }
-
-    label{display:block; margin:10px 0 6px; color:var(--muted); font-size:13px;}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.22);
-      color:var(--text);
-      outline:none;
-    }
-    input:focus{
-      border-color:rgba(85,225,255,.35);
-      box-shadow:0 0 0 4px rgba(85,225,255,.12);
-    }
-
+    .row{display:flex; gap:10px; flex-wrap:wrap}
     .btn{
-      width:100%;
-      margin-top:14px;
-      padding:12px;
-      border-radius:14px;
+      appearance:none;
       border:0;
+      padding:10px 16px;
+      border-radius:14px;
       cursor:pointer;
       font-weight:800;
+      background:rgba(255,255,255,.92);
+      color:#06131a;
+      box-shadow:0 10px 22px rgba(0,0,0,.35);
+      transition:transform .12s ease, filter .12s ease;
+      white-space:nowrap;
     }
-    .btn.primary{
-      background:linear-gradient(90deg, var(--neon2), rgba(85,225,255,.95));
-      color:#05202b;
-      box-shadow:0 12px 30px rgba(42,167,255,.22);
-    }
-    .btn.secondary{
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.14);
-    }
-
-    .btn.ghost{
-      width:auto;
-      margin:0;
-      padding:8px 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,.06);
-      color:var(--neon);
-      border:1px solid rgba(85,225,255,.20);
+    .btn:hover{filter:brightness(1.05)}
+    .btn:active{transform:translateY(1px)}
+    .btn.alt{
+      background:rgba(85,225,255,.14);
+      color:rgba(233,244,255,.95);
+      border:1px solid rgba(85,225,255,.18);
       box-shadow:none;
     }
 
-    .err{margin:8px 0 0; color:var(--danger); font-size:13px; line-height:1.35}
-
-    .hint{margin-top:12px; text-align:center; color:var(--muted); font-size:13px}
-    .hint a{color:var(--neon); text-decoration:none; font-weight:700}
-
-    .hidden{display:none}
-
-    /* немного приводим вид django-ошибок */
-    ul.errorlist{margin:8px 0 0; padding-left:18px; color:var(--danger); font-size:13px}
-    ul.errorlist li{margin:2px 0}
+    .link{
+      display:inline-block;
+      margin-top:10px;
+      color:rgba(233,244,255,.92);
+      text-decoration:underline;
+      text-underline-offset:3px;
+      opacity:.9;
+    }
+    .link:hover{opacity:1}
   </style>
 </head>
 <body>
+  <div class="starfield" aria-hidden="true">
+    <div class="stars s1"></div>
+    <div class="stars s2"></div>
+    <div class="stars s3"></div>
+  </div>
+  <div class="nebula" aria-hidden="true"></div>
+
   <div class="wrap">
-    <div class="card">
-      <div class="header">
-        <div>
-          <h1>Вход / Регистрация</h1>
-          <p>На главной странице по умолчанию открыта регистрация.</p>
-        </div>
-      </div>
+    <h1>Добро пожаловать</h1>
+    <p>Вход / регистрация.</p>
 
-      {% if request.user.is_authenticated %}
-        <div class="userbox">
-          <div class="who">Вы вошли как <b>{{ request.user.username }}</b></div>
-          <form method="post" action="{% url 'logout' %}" style="margin:0">
-            {% csrf_token %}
-            <button class="btn ghost" type="submit">Выйти</button>
-          </form>
-        </div>
-      {% endif %}
-
-      <div class="tabs" role="tablist" aria-label="Вход и регистрация">
-        <a class="tab {% if active_tab == 'signup' %}active{% endif %}" href="/?tab=signup">Регистрация</a>
-        <a class="tab {% if active_tab == 'login' %}active{% endif %}" href="/?tab=login">Вход</a>
-      </div>
-
-      <!-- РЕГИСТРАЦИЯ -->
-      <form method="post" class="{% if active_tab != 'signup' %}hidden{% endif %}">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="signup">
-
-        {{ signup_form.non_field_errors }}
-
-        <label for="id_username">Имя пользователя</label>
-        {{ signup_form.username }}
-        {{ signup_form.username.errors }}
-
-        <label for="id_email">Email</label>
-        {{ signup_form.email }}
-        {{ signup_form.email.errors }}
-
-        <label for="id_password1">Пароль</label>
-        {{ signup_form.password1 }}
-        {{ signup_form.password1.errors }}
-
-        <label for="id_password2">Повтор пароля</label>
-        {{ signup_form.password2 }}
-        {{ signup_form.password2.errors }}
-
-        <button class="btn primary" type="submit">Зарегистрироваться</button>
-
-        <div class="hint">
-          Уже есть аккаунт? <a href="/?tab=login">Войти</a>
-        </div>
-      </form>
-
-      <!-- ВХОД -->
-      <form method="post" class="{% if active_tab != 'login' %}hidden{% endif %}">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="login">
-
-        {{ login_form.non_field_errors }}
-
-        <label for="id_username">Имя пользователя</label>
-        {{ login_form.username }}
-        {{ login_form.username.errors }}
-
-        <label for="id_password">Пароль</label>
-        {{ login_form.password }}
-        {{ login_form.password.errors }}
-
-        <button class="btn primary" type="submit">Войти</button>
-
-        <div class="hint">
-          Нет аккаунта? <a href="/?tab=signup">Создать</a>
-        </div>
-      </form>
-
+    <div class="row">
+      <a class="btn" href="{% url 'login' %}">Войти</a>
+      <a class="btn alt" href="{% url 'register' %}">Регистрация</a>
     </div>
+
+    <a class="link" href="{% url 'search' %}">Перейти к поиску</a>
   </div>
 </body>
 </html>
