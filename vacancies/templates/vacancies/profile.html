@@ -5,7 +5,10 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
       <div>
         <h2 style="margin:0 0 6px;">Профиль</h2>
-        <div class="muted">Вы вошли как <b>{{ request.user.username }}</b>{% if request.user.email %} • {{ request.user.email }}{% endif %}</div>
+        <div class="muted">
+          Вы вошли как <b>{{ request.user.username }}</b>
+          {% if request.user.email %} • {{ request.user.email }}{% endif %}
+        </div>
       </div>
 
       <form method="post" action="{% url 'logout' %}" style="margin:0">
@@ -23,7 +26,9 @@
     {% for v in my_vacancies %}
       <div style="padding:12px 0; border-top:1px solid rgba(255,255,255,.10);">
         <div style="font-weight:900;">{{ v.title|default:v.slug }}</div>
-        <div class="muted" style="font-size:13px;">Статус: {{ v.get_status_display }} • {{ v.created }}</div>
+        <div class="muted" style="font-size:13px;">
+          Статус: {{ v.get_status_display }} • {{ v.created }}
+        </div>
         <div style="margin-top:6px; line-height:1.45;">{{ v.text }}</div>
       </div>
     {% empty %}

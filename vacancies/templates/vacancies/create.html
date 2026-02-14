@@ -10,44 +10,47 @@
 
       {{ form.non_field_errors }}
 
-      <label>Название / заголовок</label>
+      <label for="{{ form.title.id_for_label }}">Название / заголовок</label>
       {{ form.title }}
       {{ form.title.errors }}
 
-      <label>Описание</label>
+      <label for="{{ form.text.id_for_label }}">Описание</label>
       {{ form.text }}
       {{ form.text.errors }}
 
       <div style="display:flex; gap:12px; flex-wrap:wrap;">
         <div style="flex:1; min-width:220px;">
-          <label>Мин. опыт (лет)</label>
+          <label for="{{ form.min_experience.id_for_label }}">Мин. опыт (лет)</label>
           {{ form.min_experience }}
           {{ form.min_experience.errors }}
         </div>
         <div style="flex:1; min-width:220px;">
-          <label>Статус</label>
+          <label for="{{ form.status.id_for_label }}">Статус</label>
           {{ form.status }}
           {{ form.status.errors }}
         </div>
       </div>
 
       <div style="margin-top:12px;">
-        <label>Навыки</label>
+        <fieldset style="border:0; padding:0; margin:0;">
+          <legend style="margin:10px 0 6px; color:var(--muted); font-size:13px;">Навыки</legend>
 
-        <div style="display:flex; flex-wrap:wrap; gap:10px;">
-          {% for checkbox in form.skills %}
-            <label style="display:flex; align-items:center; gap:8px; margin:0; padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.16);">
-              {{ checkbox.tag }}
-              <span style="font-size:13px; color:rgba(233,244,255,.85);">{{ checkbox.choice_label }}</span>
-            </label>
-          {% endfor %}
-        </div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            {% for checkbox in form.skills %}
+              <label for="{{ checkbox.id_for_label }}"
+                     style="display:flex; align-items:center; gap:8px; margin:0; padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.16);">
+                {{ checkbox.tag }}
+                <span style="font-size:13px; color:rgba(233,244,255,.85);">{{ checkbox.choice_label }}</span>
+              </label>
+            {% endfor %}
+          </div>
 
-        {{ form.skills.errors }}
+          {{ form.skills.errors }}
+        </fieldset>
       </div>
 
       <div style="margin-top:12px;">
-        <label>{{ form.custom_skills.label }}</label>
+        <label for="{{ form.custom_skills.id_for_label }}">{{ form.custom_skills.label }}</label>
         {{ form.custom_skills }}
         <div class="muted" style="font-size:12px; margin-top:6px;">{{ form.custom_skills.help_text }}</div>
         {{ form.custom_skills.errors }}

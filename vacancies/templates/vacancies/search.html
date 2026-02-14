@@ -3,10 +3,19 @@
 {% block content %}
   <div class="card">
     <h2 style="margin:0 0 6px;">Поиск</h2>
-    <div class="muted" style="margin-bottom:14px;">Все вакансии всех пользователей.</div>
+    <div class="muted" style="margin-bottom:14px;">
+      Все вакансии всех пользователей.
+    </div>
 
     <form method="get" style="display:flex; gap:10px; flex-wrap:wrap;">
-      <input name="q" value="{{ q }}" placeholder="Поиск по названию или описанию" style="flex:1; min-width:240px;">
+      <input
+        type="text"
+        name="q"
+        value="{{ q }}"
+        placeholder="Поиск по названию или описанию"
+        style="flex:1; min-width:240px;"
+        aria-label="Поиск вакансий"
+      >
       <button class="btn" type="submit" style="margin-top:0;">Найти</button>
     </form>
   </div>
@@ -17,15 +26,23 @@
     <div class="card" style="margin-bottom:12px;">
       <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div>
-          <div style="font-weight:900; font-size:18px;">{{ v.title|default:v.slug }}</div>
-          <div class="muted" style="font-size:13px;">Автор: {{ v.user.username|default:"—" }} • ID: {{ v.id }} • {{ v.created }}</div>
+          <div style="font-weight:900; font-size:18px;">
+            {{ v.title|default:v.slug }}
+          </div>
+          <div class="muted" style="font-size:13px;">
+            Автор: {{ v.user.username|default:"—" }} • {{ v.created }}
+          </div>
         </div>
-        <div class="muted" style="font-size:13px;">Статус: {{ v.get_status_display }}</div>
+        <div class="muted" style="font-size:13px;">
+          Статус: {{ v.get_status_display }}
+        </div>
       </div>
 
-      <div style="margin-top:10px; line-height:1.5;">{{ v.text }}</div>
+      <div style="margin-top:10px; line-height:1.5;">
+        {{ v.text }}
+      </div>
 
-      {% if v.skills.all %}
+      {% if v.skills.exists %}
         <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
           {% for s in v.skills.all %}
             <span style="padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.18); color:rgba(233,244,255,.85); font-size:12px;">
@@ -40,8 +57,4 @@
       Ничего не найдено.
     </div>
   {% endfor %}
-{% endblock %}
-
-{% block extra_head %}
-  {% with "search" as _ %}{% endwith %}
 {% endblock %}
