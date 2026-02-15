@@ -35,12 +35,11 @@
         <fieldset style="border:0; padding:0; margin:0;">
           <legend style="margin:10px 0 6px; color:var(--muted); font-size:13px;">Навыки</legend>
 
-          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <div class="skills-grid">
             {% for checkbox in form.skills %}
-              <label for="{{ checkbox.id_for_label }}"
-                     style="display:flex; align-items:center; gap:8px; margin:0; padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.16);">
+              <label class="skill-chip" for="{{ checkbox.id_for_label }}">
                 {{ checkbox.tag }}
-                <span style="font-size:13px; color:rgba(233,244,255,.85);">{{ checkbox.choice_label }}</span>
+                <span class="skill-chip__pill">{{ checkbox.choice_label }}</span>
               </label>
             {% endfor %}
           </div>

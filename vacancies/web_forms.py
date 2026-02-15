@@ -22,6 +22,9 @@ class VacancyWebForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"placeholder": "Например: Работа с бетоном"}),
             "text": forms.Textarea(attrs={"rows": 5, "placeholder": "Опиши вакансию..."}),
             "min_experience": forms.NumberInput(attrs={"min": 0}),
+            # По умолчанию Django рендерит ManyToMany как <select multiple>.
+            # Нам нужны кликабельные «чипы» → чекбоксы.
+            "skills": forms.CheckboxSelectMultiple(),
         }
 
     def clean_title(self):
