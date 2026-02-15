@@ -1,295 +1,95 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Вход / Регистрация</title>
-  <style>
-    :root{
-      --bg1:#06131a;
-      --bg2:#0a2230;
-      --card:rgba(255,255,255,.06);
-      --stroke:rgba(255,255,255,.12);
-      --text:#e9f4ff;
-      --muted:rgba(233,244,255,.75);
-      --neon:#55e1ff;
-      --neon2:#2aa7ff;
-      --danger:#ffb4b4;
-    }
+{% extends "base_neon.html" %}
+{% load static %}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      color:var(--text);
-      background:radial-gradient(1200px 800px at 50% 25%, rgba(85,225,255,.20), transparent 60%),
-                 radial-gradient(900px 600px at 20% 80%, rgba(42,167,255,.18), transparent 55%),
-                 linear-gradient(180deg, var(--bg2), var(--bg1));
-      overflow:hidden;
-      padding:28px 12px;
-    }
+{% block title %}Вход / Регистрация{% endblock %}
 
-    /* ===== STARFIELD BACKGROUND (замена мерцания) ===== */
-    .starfield{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-      overflow:hidden;
-    }
-    .starfield .stars{
-      position:absolute;
-      inset:-60%;
-      background-repeat:repeat;
-      will-change:transform, opacity;
-      animation-name: starDrift, starTwinkle;
-      animation-timing-function: linear, ease-in-out;
-      animation-iteration-count: infinite, infinite;
-    }
-    .starfield .s1{
-      background-image:
-        radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,.95) 60%, transparent 61%),
-        radial-gradient(1px 1px at 110px 80px, rgba(255,255,255,.75) 60%, transparent 61%),
-        radial-gradient(1px 1px at 60px 140px, rgba(255,255,255,.85) 60%, transparent 61%),
-        radial-gradient(1px 1px at 190px 30px, rgba(255,255,255,.70) 60%, transparent 61%),
-        radial-gradient(1px 1px at 220px 160px, rgba(255,255,255,.65) 60%, transparent 61%),
-        radial-gradient(1px 1px at 20px 160px, rgba(255,255,255,.75) 60%, transparent 61%),
-        radial-gradient(1px 1px at 240px 110px, rgba(255,255,255,.55) 60%, transparent 61%),
-        radial-gradient(1px 1px at 140px 170px, rgba(255,255,255,.60) 60%, transparent 61%);
-      background-size:280px 210px;
-      opacity:.60;
-      animation-duration: 70s, 4.6s;
-    }
-    .starfield .s2{
-      background-image:
-        radial-gradient(1.5px 1.5px at 40px 60px, rgba(170,235,255,.90) 60%, transparent 61%),
-        radial-gradient(1.5px 1.5px at 160px 20px, rgba(170,235,255,.70) 60%, transparent 61%),
-        radial-gradient(1.5px 1.5px at 200px 130px, rgba(170,235,255,.80) 60%, transparent 61%),
-        radial-gradient(1.5px 1.5px at 90px 150px, rgba(170,235,255,.65) 60%, transparent 61%),
-        radial-gradient(1.5px 1.5px at 260px 90px, rgba(170,235,255,.55) 60%, transparent 61%);
-      background-size:360px 260px;
-      opacity:.38;
-      filter:blur(.25px);
-      animation-duration: 105s, 7.5s;
-    }
-    .starfield .s3{
-      background-image:
-        radial-gradient(2px 2px at 80px 90px, rgba(255,255,255,.55) 60%, transparent 61%),
-        radial-gradient(2px 2px at 220px 40px, rgba(255,255,255,.45) 60%, transparent 61%),
-        radial-gradient(2px 2px at 260px 170px, rgba(255,255,255,.40) 60%, transparent 61%),
-        radial-gradient(2px 2px at 40px 180px, rgba(255,255,255,.35) 60%, transparent 61%);
-      background-size:520px 380px;
-      opacity:.22;
-      filter:blur(.10px);
-      animation-duration: 150s, 11s;
-    }
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'authentication/css/auth_landing.css' %}">
+{% endblock %}
 
-    .nebula{
-      position:fixed;
-      inset:-30%;
-      background:radial-gradient(400px 260px at 50% 110%, rgba(85,225,255,.22), transparent 70%);
-      filter:blur(18px);
-      opacity:.8;
-      pointer-events:none;
-      z-index:0;
-      animation: nebulaPulse 8s ease-in-out infinite;
-    }
+{% block content %}
+  <div class="auth-screen">
+    <div class="auth-wrap">
+      <div class="card">
+        <div class="auth-topbar">
+          <div class="auth-brand">PusikMusik</div>
 
-    @keyframes starDrift{
-      from { transform: translate3d(0,0,0); }
-      to   { transform: translate3d(0,-40%,0); }
-    }
-    @keyframes starTwinkle{
-      0%,100% { opacity:.22; }
-      50%     { opacity:.85; }
-    }
-    @keyframes nebulaPulse{
-      0%,100% { opacity:.65; transform: translate3d(0,0,0) scale(1); }
-      50%     { opacity:.95; transform: translate3d(0,-1%,0) scale(1.03); }
-    }
-
-    .wrap{width:min(440px, 94vw); position:relative; z-index:1;}
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:20px;
-      padding:18px;
-      box-shadow:0 24px 70px rgba(0,0,0,.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      position:relative;
-    }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      border-radius:20px;
-      padding:1px;
-      background:linear-gradient(135deg, rgba(85,225,255,.50), rgba(42,167,255,.10), rgba(85,225,255,.40));
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events:none;
-      opacity:.55;
-    }
-
-    h1{margin:0 0 10px; font-size:22px;}
-    .muted{color:var(--muted)}
-
-    .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;}
-    .brand{font-weight:900; letter-spacing:.3px}
-    .btn{
-      display:inline-block;
-      padding:12px 14px;
-      border-radius:14px;
-      border:0;
-      cursor:pointer;
-      font-weight:800;
-      text-decoration:none;
-      text-align:center;
-    }
-    .btn.primary{
-      width:100%;
-      margin-top:14px;
-      background:linear-gradient(90deg, var(--neon2), rgba(85,225,255,.95));
-      color:#05202b;
-      box-shadow:0 12px 30px rgba(42,167,255,.22);
-    }
-    .btn.ghost{
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.14);
-    }
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      margin:10px 0 14px;
-      padding:6px;
-      border-radius:16px;
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .tab{
-      flex:1;
-      text-align:center;
-      padding:10px 10px;
-      border-radius:12px;
-      color:rgba(233,244,255,.82);
-      text-decoration:none;
-      font-weight:800;
-      transition:background .15s ease, color .15s ease;
-    }
-    .tab.active{
-      background:linear-gradient(180deg, rgba(85,225,255,.16), rgba(42,167,255,.06));
-      color:var(--text);
-      box-shadow: inset 0 0 0 1px rgba(85,225,255,.18);
-    }
-
-    label{display:block; margin:10px 0 6px; color:var(--muted); font-size:13px;}
-    input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.22);
-      color:var(--text);
-      outline:none;
-    }
-    input:focus{
-      border-color:rgba(85,225,255,.35);
-      box-shadow:0 0 0 4px rgba(85,225,255,.12);
-    }
-
-    .hint{margin-top:12px; color:rgba(233,244,255,.75); font-size:13px;}
-    .hint a{color:rgba(233,244,255,.95); text-decoration:underline; text-underline-offset:3px;}
-    .hidden{display:none;}
-  </style>
-</head>
-<body>
-  <div class="starfield" aria-hidden="true">
-    <div class="stars s1"></div>
-    <div class="stars s2"></div>
-    <div class="stars s3"></div>
-  </div>
-  <div class="nebula" aria-hidden="true"></div>
-
-  <div class="wrap">
-    <div class="card">
-      <div class="topbar">
-        <div class="brand">PusikMusik</div>
-
-        {% if request.user.is_authenticated %}
-          <form method="post" action="{% url 'logout' %}" style="margin:0">
-            {% csrf_token %}
-            <button class="btn ghost" type="submit">Выйти</button>
-          </form>
-        {% endif %}
-      </div>
-
-      <div class="tabs" role="tablist" aria-label="Вход и регистрация">
-        <a class="tab {% if active_tab == 'signup' %}active{% endif %}" href="/?tab=signup">Регистрация</a>
-        <a class="tab {% if active_tab == 'login' %}active{% endif %}" href="/?tab=login">Вход</a>
-      </div>
-
-      <!-- РЕГИСТРАЦИЯ -->
-      <form method="post" class="{% if active_tab != 'signup' %}hidden{% endif %}">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="signup">
-
-        {{ signup_form.non_field_errors }}
-
-        <label for="id_username">Имя пользователя</label>
-        {{ signup_form.username }}
-        {{ signup_form.username.errors }}
-
-        <label for="id_email">Email</label>
-        {{ signup_form.email }}
-        {{ signup_form.email.errors }}
-
-        <label for="id_password1">Пароль</label>
-        {{ signup_form.password1 }}
-        {{ signup_form.password1.errors }}
-
-        <label for="id_password2">Повтор пароля</label>
-        {{ signup_form.password2 }}
-        {{ signup_form.password2.errors }}
-
-        <button class="btn primary" type="submit">Зарегистрироваться</button>
-
-        <div class="hint">
-          Уже есть аккаунт? <a href="/?tab=login">Войти</a>
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" style="margin:0">
+              {% csrf_token %}
+              <button class="btn secondary" type="submit">Выйти</button>
+            </form>
+          {% endif %}
         </div>
-      </form>
 
-      <!-- ВХОД -->
-      <form method="post" class="{% if active_tab != 'login' %}hidden{% endif %}">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="login">
-
-        {{ login_form.non_field_errors }}
-
-        <label for="id_username">Имя пользователя</label>
-        {{ login_form.username }}
-        {{ login_form.username.errors }}
-
-        <label for="id_password">Пароль</label>
-        {{ login_form.password }}
-        {{ login_form.password.errors }}
-
-        <button class="btn primary" type="submit">Войти</button>
-
-        <div class="hint">
-          Нет аккаунта? <a href="/?tab=signup">Создать</a>
+        <div class="auth-tabs" role="tablist" aria-label="Вход и регистрация">
+          <a class="auth-tab {% if active_tab == 'signup' %}is-active{% endif %}"
+             href="{% url 'auth' %}?tab=signup{% if next %}&next={{ next|urlencode }}{% endif %}">
+            Регистрация
+          </a>
+          <a class="auth-tab {% if active_tab == 'login' %}is-active{% endif %}"
+             href="{% url 'auth' %}?tab=login{% if next %}&next={{ next|urlencode }}{% endif %}">
+            Вход
+          </a>
         </div>
-      </form>
 
+        <!-- РЕГИСТРАЦИЯ -->
+        <form method="post" class="auth-form {% if active_tab != 'signup' %}is-hidden{% endif %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="signup">
+          {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+          {{ signup_form.non_field_errors }}
+
+          {{ signup_form.username.label_tag }}
+          {{ signup_form.username }}
+          {{ signup_form.username.errors }}
+
+          {{ signup_form.email.label_tag }}
+          {{ signup_form.email }}
+          {{ signup_form.email.errors }}
+
+          {{ signup_form.password1.label_tag }}
+          {{ signup_form.password1 }}
+          {{ signup_form.password1.errors }}
+
+          {{ signup_form.password2.label_tag }}
+          {{ signup_form.password2 }}
+          {{ signup_form.password2.errors }}
+
+          <button class="btn primary" type="submit">Зарегистрироваться</button>
+
+          <div class="auth-hint">
+            Уже есть аккаунт?
+            <a href="{% url 'auth' %}?tab=login{% if next %}&next={{ next|urlencode }}{% endif %}">Войти</a>
+          </div>
+        </form>
+
+        <!-- ВХОД -->
+        <form method="post" class="auth-form {% if active_tab != 'login' %}is-hidden{% endif %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="login">
+          {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+          {{ login_form.non_field_errors }}
+
+          {{ login_form.username.label_tag }}
+          {{ login_form.username }}
+          {{ login_form.username.errors }}
+
+          {{ login_form.password.label_tag }}
+          {{ login_form.password }}
+          {{ login_form.password.errors }}
+
+          <button class="btn primary" type="submit">Войти</button>
+
+          <div class="auth-hint">
+            Нет аккаунта?
+            <a href="{% url 'auth' %}?tab=signup{% if next %}&next={{ next|urlencode }}{% endif %}">Создать</a>
+          </div>
+        </form>
+
+      </div>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

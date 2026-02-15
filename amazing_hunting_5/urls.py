@@ -33,7 +33,8 @@ router.register('skill', SkillsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('', AuthLandingView.as_view(), name='home'),
+    path('', SearchView.as_view(), name='home'),
+    path('auth/', AuthLandingView.as_view(), name='auth'),
     path('search/', SearchView.as_view(), name='search'),
     path('create/', VacancyCreateWebView.as_view(), name='create'),
     path('profile/', ProfileView.as_view(), name='profile'),

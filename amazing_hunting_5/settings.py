@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-TOTAL_ON_PAGE = 3
+TOTAL_ON_PAGE = 10
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -174,7 +174,7 @@ SPECTACULAR_SETTINGS = {
 AUTH_USER_MODEL = 'authentication.User'
 
 # для веб-страниц (LoginRequiredMixin)
-LOGIN_URL = 'home'
+LOGIN_URL = 'auth'
 LOGIN_REDIRECT_URL = 'search'
 LOGOUT_REDIRECT_URL = 'home'
 
