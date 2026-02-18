@@ -54,7 +54,10 @@ class AuthLandingView(View):
             login_form = AuthenticationForm(request, data=request.POST, prefix="login")
             if login_form.is_valid():
                 auth_login(request, login_form.get_user())
-                return redirect(self._safe_next(request, next_url))
+                # Показать заставку после успешного входа (по просьбе: как после регистрации)
+                target = self._safe_next(request, next_url)
+                sep = "&" if "?" in target else "?"
+                return redirect(f"{target}{sep}splash=1")
         else:
             active_tab = "signup"
             signup_form = SignUpForm(request.POST, prefix="signup")
