@@ -1,8 +1,52 @@
 {% extends "base_neon.html" %}
-{% block title %}Нажми{% endblock %}
+{% load static %}
+{% block title %}жми{% endblock %}
+
+{% block extra_head %}
+  <style>
+    /* Позиционируем гифку поверх космоса, но под контентом и нижним меню */
+    .press-tenor-overlay{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding-bottom:110px; /* чтобы не перекрывать нижнее меню */
+    }
+    .press-tenor-wrap{
+      width:min(520px, 78vw);
+      filter:
+        drop-shadow(0 0 18px rgba(85,225,255,.22))
+        drop-shadow(0 0 28px rgba(255,120,240,.14));
+      opacity:.98;
+    }
+    .press-tenor-wrap .tenor-gif-embed{
+      margin:0 !important;
+      pointer-events:none;
+    }
+    @media (prefers-reduced-motion: reduce){
+      .press-tenor-overlay{ display:none; }
+    }
+  </style>
+  <!-- Лучший вариант для Tenor: официальный embed (без скачивания файла) -->
+  <script async src="https://tenor.com/embed.js"></script>
+{% endblock %}
+
+{% block overlay %}
+  <div class="press-tenor-overlay" aria-hidden="true">
+    <div class="press-tenor-wrap">
+      <div class="tenor-gif-embed" data-postid="13118924279443462854" data-share-method="host" data-aspect-ratio="1" data-width="100%"></div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
-  {#
-    Пока без логики: по нажатию показываем обычный фон (звёзды/космос) и подсветку активной кнопки.
-    Контент добавишь позже.
-  #}
+  <div class="card" style="max-width:640px; margin:0 auto;">
+    <h2 style="margin:0 0 6px;">🙂 жми</h2>
+    <div class="muted">
+      Тут будет скоро будущая функция, а пока — танцующая Хацунэ Мику 😄
+    </div>
+  </div>
 {% endblock %}
