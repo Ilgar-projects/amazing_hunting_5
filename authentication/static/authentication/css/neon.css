@@ -175,6 +175,16 @@
       opacity:.92;
       filter: drop-shadow(0 0 10px rgba(85,225,255,.15));
     }
+
+    /* поддержка эмодзи-иконки в навигации */
+    .nav-item .ico.emoji{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      line-height:1;
+      filter: drop-shadow(0 0 10px rgba(85,225,255,.22));
+    }
     .nav-item .label{font-size:13px; line-height:1}
 
     .nav-item.active{

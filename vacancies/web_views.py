@@ -59,3 +59,12 @@ class ProfileView(View):
             return _redirect_to_auth(request, tab="login")
         my = Vacancy.objects.filter(user=request.user).prefetch_related("skills").order_by("-id")
         return render(request, self.template_name, {"my_vacancies": my, "active_nav": "profile"})
+
+
+class PressView(View):
+    """Пустая страница под будущую функцию центральной кнопки."""
+
+    template_name = "vacancies/press.html"
+
+    def get(self, request):
+        return render(request, self.template_name, {"active_nav": "press"})

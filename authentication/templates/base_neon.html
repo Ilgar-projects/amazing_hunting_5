@@ -100,6 +100,11 @@ Splash screen (показываем 1 раз на вкладку + принуд�
       <div class="label">Создать</div>
     </a>
 
+    <a class="nav-item {% if active_nav == 'press' %}active{% endif %}" href="{% url 'press' %}">
+      <span class="ico emoji" aria-hidden="true">🙂</span>
+      <div class="label">нажми</div>
+    </a>
+
     <a class="nav-item {% if active_nav == 'login' %}active{% endif %}" href="{% url 'auth' %}?tab=login">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M10 17l5-5-5-5"></path>
