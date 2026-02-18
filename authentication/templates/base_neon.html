@@ -13,10 +13,12 @@
   <meta name="theme-color" content="#061824">
   <link rel="stylesheet" href="{% static 'authentication/css/neon.css' %}">
 
-  {# Splash screen (показываем 1 раз на вкладку + принудительно по ?splash=1)
-     ВАЖНО: на некоторых десктопных браузерах sessionStorage может вести себя нестабильно.
-     Поэтому используем гибрид: sessionStorage + window.name (тоже "на вкладку" и сбрасывается при закрытии).
-  #}
+<!--
+Splash screen (показываем 1 раз на вкладку + принудительно по ?splash=1)
+ВАЖНО: на некоторых десктопных браузерах sessionStorage может вести себя нестабильно.
+Поэтому используем гибрид: sessionStorage + window.name (тоже "на вкладку" и сбрасывается при закрытии).
+-->
+
   <script>
     (function () {
       var params;
