@@ -167,10 +167,9 @@ Splash screen (показываем 1 раз на вкладку + принуд�
         else showDance();
       }
 
-      // Закрытие по клику на фон
-      danceOverlay.addEventListener('click', function (e) {
-        // если кликнули именно по фону (не по картинке)
-        if (e.target === danceOverlay) hideDance();
+      // Закрытие по клику (и по фону, и по гифке)
+      danceOverlay.addEventListener('click', function () {
+        hideDance();
       });
 
       // Закрытие по Esc
