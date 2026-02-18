@@ -61,7 +61,10 @@ class AuthLandingView(View):
             if signup_form.is_valid():
                 user = signup_form.save()
                 auth_login(request, user)
-                return redirect(self._safe_next(request, next_url))
+                target = self._safe_next(request, next_url)
+                # Показать заставку после успешной регистрации (даже если в этой вкладке она уже показывалась)
+                sep = "&" if "?" in target else "?"
+                return redirect(f"{target}{sep}splash=1")
 
         context = {
             "signup_form": signup_form,

@@ -12,9 +12,39 @@
   <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
   <meta name="theme-color" content="#061824">
   <link rel="stylesheet" href="{% static 'authentication/css/neon.css' %}">
+
+  {# Splash screen (показываем 1 раз на вкладку + принудительно по ?splash=1) #}
+  <script>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var force = params.get('splash') === '1';
+        var key = 'pm_splash_shown';
+
+        if (!sessionStorage.getItem(key) || force) {
+          document.documentElement.classList.add('show-splash');
+          sessionStorage.setItem(key, '1');
+
+          // чтобы при F5/повторном открытии этой же страницы заставка не повторялась
+          if (force) {
+            params.delete('splash');
+            var qs = params.toString();
+            var newUrl = window.location.pathname + (qs ? ('?' + qs) : '') + window.location.hash;
+            history.replaceState(null, '', newUrl);
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
   {% block extra_head %}{% endblock %}
 </head>
 <body>
+  <div class="splash-overlay" aria-hidden="true">
+    <img class="splash-img" src="{% static 'img/splash-panda.png' %}" alt="">
+  </div>
+
   <div class="starfield" aria-hidden="true">
     <div class="stars s1"></div>
     <div class="stars s2"></div>
@@ -60,5 +90,28 @@
       <div class="label">Профиль</div>
     </a>
   </nav>
+
+  <script>
+    (function () {
+      var overlay = document.querySelector('.splash-overlay');
+      if (!overlay) return;
+
+      // если класс не поставили в <head>, значит заставка не нужна — удаляем
+      if (!document.documentElement.classList.contains('show-splash')) {
+        overlay.remove();
+        return;
+      }
+
+      // держим 3 секунды, затем плавно скрываем
+      window.setTimeout(function () {
+        overlay.classList.add('is-hiding');
+      }, 2600);
+
+      window.setTimeout(function () {
+        overlay.remove();
+        document.documentElement.classList.remove('show-splash');
+      }, 3100);
+    })();
+  </script>
 </body>
 </html>
