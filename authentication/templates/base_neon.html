@@ -79,6 +79,11 @@ Splash screen (показываем 1 раз на вкладку + принуд�
   </div>
   <div class="nebula" aria-hidden="true"></div>
 
+  <!-- Оверлей с гифкой (показывается по нажатию кнопки «Нажми») -->
+  <div class="dance-overlay" id="danceOverlay" aria-hidden="true">
+    <img class="dance-gif" src="{% static 'img/miku-dance.gif' %}" alt="">
+  </div>
+
   <div class="page">
     {% block content %}{% endblock %}
   </div>
@@ -98,11 +103,6 @@ Splash screen (показываем 1 раз на вкладку + принуд�
         <line x1="5" y1="12" x2="19" y2="12"></line>
       </svg>
       <div class="label">Создать</div>
-    </a>
-
-    <a class="nav-item {% if active_nav == 'press' %}active{% endif %}" href="{% url 'press' %}">
-      <span class="ico emoji" aria-hidden="true">🙂</span>
-      <div class="label">нажми</div>
     </a>
 
     <a class="nav-item {% if active_nav == 'login' %}active{% endif %}" href="{% url 'auth' %}?tab=login">
@@ -143,6 +143,86 @@ Splash screen (показываем 1 раз на вкладку + принуд�
         overlay.remove();
         document.documentElement.classList.remove('show-splash');
       }, 3100);
+    })();
+  </script>
+
+  <script>
+    // Кнопка «Нажми» (в центре нижней навигации) показывает гифку на весь экран.
+    (function () {
+      var danceOverlay = document.getElementById('danceOverlay');
+      if (!danceOverlay) return;
+
+      function showDance() {
+        danceOverlay.classList.add('is-visible');
+        danceOverlay.setAttribute('aria-hidden', 'false');
+      }
+
+      function hideDance() {
+        danceOverlay.classList.remove('is-visible');
+        danceOverlay.setAttribute('aria-hidden', 'true');
+      }
+
+      function toggleDance() {
+        if (danceOverlay.classList.contains('is-visible')) hideDance();
+        else showDance();
+      }
+
+      // Закрытие по клику на фон
+      danceOverlay.addEventListener('click', function (e) {
+        // если кликнули именно по фону (не по картинке)
+        if (e.target === danceOverlay) hideDance();
+      });
+
+      // Закрытие по Esc
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') hideDance();
+      });
+
+      // 1) Ищем уже существующую кнопку
+      var trigger = document.querySelector('[data-dance-trigger="1"]');
+
+      // 2) Если её нет — пытаемся найти по тексту «нажми»
+      if (!trigger) {
+        var candidates = document.querySelectorAll('.bottom-nav .nav-item');
+        for (var i = 0; i < candidates.length; i++) {
+          var t = (candidates[i].textContent || '').trim().toLowerCase();
+          if (t.indexOf('нажми') !== -1) { trigger = candidates[i]; break; }
+        }
+      }
+
+      // 3) Если всё равно нет — добавляем кнопку в центр (чтобы было 5 кнопок)
+      if (!trigger) {
+        var nav = document.querySelector('.bottom-nav');
+        if (!nav) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nav-item nav-press';
+        btn.setAttribute('data-dance-trigger', '1');
+        btn.innerHTML =
+          '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+          + '<path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"></path>'
+          + '</svg>'
+          + '<div class="label">Нажми</div>';
+
+        // вставляем после второй кнопки (центр)
+        var items = nav.querySelectorAll('.nav-item');
+        if (items.length >= 2 && items[1].nextSibling) {
+          nav.insertBefore(btn, items[1].nextSibling);
+        } else {
+          nav.appendChild(btn);
+        }
+
+        trigger = btn;
+      }
+
+      // Если это ссылка — отменяем переход
+      trigger.addEventListener('click', function (e) {
+        if (trigger.tagName && trigger.tagName.toLowerCase() === 'a') {
+          e.preventDefault();
+        }
+        toggleDance();
+      });
     })();
   </script>
 </body>
